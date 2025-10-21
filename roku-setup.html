@@ -80,6 +80,7 @@
                 <div class="cta-button">
                     <a href="tel:+1-833-940-0649" class="btn-primary">Call Now: (833) 940-0649</a>
                 </div>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
             </div>
         </nav>
     </header>
@@ -327,6 +328,15 @@
         </div>
     </footer>
 
+    <!-- Floating Call Button -->
+    <a href="tel:+1-833-940-0649" class="floating-call-btn" id="floatingCallBtn">
+        <span class="phone-icon">📞</span>
+        <div>
+            <div class="call-text">Call Now</div>
+            <div class="phone-number">(833) 940-0649</div>
+        </div>
+    </a>
+
     <!-- Additional CSS for this page -->
     <style>
         .active {
@@ -451,6 +461,70 @@
             }
         }
     </style>
+    
+    <!-- Mobile Menu JavaScript -->
+    <script>
+        function toggleMobileMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.classList.toggle('active');
+        }
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-menu').classList.remove('active');
+            });
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const navMenu = document.querySelector('.nav-menu');
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (!navMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        });
+        
+        // Floating call button functionality
+        const floatingBtn = document.getElementById('floatingCallBtn');
+        let lastScrollTop = 0;
+        let ticking = false;
+        
+        function updateFloatingButton() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                floatingBtn.classList.add('show');
+                floatingBtn.classList.remove('hide');
+            } else if (scrollTop < lastScrollTop) {
+                floatingBtn.classList.add('show');
+                floatingBtn.classList.remove('hide');
+            }
+            
+            lastScrollTop = scrollTop;
+            ticking = false;
+        }
+        
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateFloatingButton);
+                ticking = true;
+            }
+        }
+        
+        window.addEventListener('scroll', requestTick);
+        
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                floatingBtn.classList.add('show');
+            }, 1000);
+        });
+        
+        floatingBtn.addEventListener('click', () => {
+            console.log('Floating call button clicked');
+        });
+    </script>
 </body>
 </html>
 
